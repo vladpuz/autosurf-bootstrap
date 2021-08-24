@@ -17,6 +17,7 @@ const cleanup = async () => {
   }
 
   try {
+    fs.removeSync('C:/Sandbox');
     await fs.writeFile('C:/Windows/Sandboxie.ini', `
 [GlobalSettings]
 

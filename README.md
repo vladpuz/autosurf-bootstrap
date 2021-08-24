@@ -81,5 +81,3 @@ yarn run bootstrap
 ```shell
 yarn run cleanup
 ```
-
-Скрипт не сможет удалить папку `C:/Sandbox`, сделайте это вручную.
