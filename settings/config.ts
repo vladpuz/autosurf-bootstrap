@@ -7,6 +7,6 @@ export const config = {
     // Задержка после запуска системы
     systemStart: 5,
     // Задержка после запуска каждой копии webisida
-    webisidaStart: 30,
+    webisidaStart: 20,
   },
 };
