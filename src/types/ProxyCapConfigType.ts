@@ -8,8 +8,8 @@ export type ProxyCapConfigType = {
         '@hostname': string
         '@port': number
         '@auth_method': 'password' | 'none'
-        '@username'?: string
-        '@password'?: string
+        '@username'?: string | null
+        '@password'?: string | null
         '@is_default': boolean
       }>
     }

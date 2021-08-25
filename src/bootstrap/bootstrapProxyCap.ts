@@ -1,12 +1,11 @@
 import path from 'path';
 import fs from 'fs-extra';
 import xmlbuilder from 'xmlbuilder';
-import colors from 'colors';
 import { exec } from 'child_process';
-import { parseProxies } from './parseProxies';
+import { parseProxies } from '../utils/parseProxies';
 import { ProxyCapConfigType } from '../types/ProxyCapConfigType';
 
-export const createProxyCapConfig = async (): Promise<void> => {
+export const bootstrapProxyCap = async (): Promise<void> => {
   const proxiesList = parseProxies();
 
   const config: ProxyCapConfigType = {
@@ -22,7 +21,8 @@ export const createProxyCapConfig = async (): Promise<void> => {
   };
 
   proxiesList.forEach((proxy, i) => {
-    const { ip, port, username, password } = proxy;
+    const { ip, port, login, password } = proxy;
+    const authMethod = (login && password) ? 'password' : 'none';
     const name = `webisida_${i + 1}`;
 
     config.proxycap_ruleset.proxy_servers.proxy_server.push({
@@ -30,9 +30,9 @@ export const createProxyCapConfig = async (): Promise<void> => {
       '@type': 'socks5',
       '@hostname': ip,
       '@port': port,
-      '@auth_method': (username || password) ? 'password' : 'none',
-      '@username': username,
-      '@password': password,
+      '@auth_method': authMethod,
+      '@username': authMethod === 'password' ? login : null,
+      '@password': authMethod === 'password' ? password : null,
       '@is_default': i === 0,
     });
 
@@ -73,18 +73,12 @@ export const createProxyCapConfig = async (): Promise<void> => {
   });
 
   const xml = xmlbuilder.create(config).end({ pretty: true });
-  const configPath = path.join(__dirname, 'proxyCapConfig.xml');
+  const configPath = path.join(__dirname, '../utils/machine.xml');
 
-  try {
-    await fs.writeFile(configPath, xml);
-    exec('.\\xml2prs.exe .\\proxyCapConfig.xml C:\\ProgramData\\ProxyCap\\machine.prs', { cwd: __dirname }, () => {
-      fs.remove(configPath)
-        .catch((err) => {
-          console.log(`Настройка ProxyCap - ${colors.red('ошибка')}`, err);
-        });
-    });
-    console.log(`Настройка ProxyCap - ${colors.green('успешно')}`);
-  } catch (err) {
-    console.log(`Настройка ProxyCap - ${colors.red('ошибка')}`, err);
-  }
+  await fs.writeFile(configPath, xml);
+  exec(
+    '.\\xml2prs.exe .\\machine.xml C:\\ProgramData\\ProxyCap\\machine.prs',
+    { cwd: path.join(__dirname, '../utils') },
+    () => fs.removeSync(configPath),
+  );
 };

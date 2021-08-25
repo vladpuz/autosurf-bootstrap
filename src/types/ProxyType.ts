@@ -1,6 +1,6 @@
 export type ProxyType = {
   ip: string
   port: number
-  username?: string
+  login?: string
   password?: string
 };

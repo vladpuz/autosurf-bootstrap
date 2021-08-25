@@ -1,29 +1,30 @@
 {
-  "name": "webisida-bootstrap",
-  "main": "src/bootstrap.ts",
+  "name": "autosurf-bootstrap",
   "private": true,
   "scripts": {
-    "bootstrap": "ts-node .",
+    "bootstrap": "ts-node src/bootstrap.ts",
     "cleanup": "ts-node src/cleanup.ts",
+    "monitoring": "ts-node src/monitoring.ts",
     "test": "yarn run test:tsc && yarn run test:eslint",
     "test:tsc": "tsc",
     "test:eslint": "eslint ."
   },
   "dependencies": {
-    "colors": "^1.4.0",
+    "chalk": "^4.1.2",
     "fs-extra": "^10.0.0",
+    "node-os-utils": "^1.3.5",
     "windows-shortcuts": "^0.1.6",
     "xmlbuilder": "^15.1.1"
   },
   "devDependencies": {
-    "@types/colors": "^1.2.1",
     "@types/fs-extra": "^9.0.12",
+    "@types/node-os-utils": "^1.2.0",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
-    "eslint-plugin-import": "^2.24.1",
+    "eslint-plugin-import": "^2.24.2",
     "ts-node": "^10.2.1",
     "typescript": "^4.3.5"
   }

@@ -1,7 +1,7 @@
-// Установите здесь ваши SOCKS5 прокси
-// Формат - username:password@ip:port
+// Вставьте сюда ваши socks5 прокси
+// Формат login:password@ip:port или ip:port
 
 export const proxies = `
-username:password@ip:port
-username:password@ip:port
+login:password@ip:port
+ip:port
 `;

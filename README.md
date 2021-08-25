@@ -1,4 +1,4 @@
-## Webisida Bootstrap
+## Autosurf Bootstrap
 
 Этот скрипт автоматизирует масштабирование программы `Webisida`. Установите и
 настройте одну копию `Webisida`, задайте прокси и он создаст нужное количество
@@ -55,15 +55,15 @@ npm install -g yarn
 сохранить настройки сохраните ваши профили.
 
 1. Скачайте portable версию `Webisida` (называется минимальная версия).
-2. Создайте папку по пути `webisida-bootstrap/webisidas/webisida` и поместите в
+2. Создайте папку по пути `autosurf-bootstrap/webisidas/webisida` и поместите в
    нее скачанный файл `Webisida.Browser.exe`.
 3. Запустите и настройте `Webisida`. Эти настройки будут скопированы на каждую
    созданную копию программы. Закройте `Webisida`.
-4. Настройте прокси в файле `webisida-bootstrap/settings/proxies.ts`. Для
+4. Настройте прокси в файле `autosurf-bootstrap/settings/proxies.ts`. Для
    примера в этом файле есть два шаблона прокси.
-5. Настройте другие параметры в `webisida-bootstrap/settings/proxies.ts`. Для
+5. Настройте другие параметры в `autosurf-bootstrap/settings/proxies.ts`. Для
    всех параметров есть комментарий с описанием.
-6. Наконец откройте терминал в директории `webisida-bootstrap` и выполните
+6. Наконец откройте терминал в директории `autosurf-bootstrap` и выполните
    команды:
 
 ```shell
@@ -76,7 +76,7 @@ yarn run bootstrap
 
 ## Очистка
 
-Для очистки системы выполните команду в директории `webisida-bootstrap`:
+Для очистки системы выполните команду в директории `autosurf-bootstrap`:
 
 ```shell
 yarn run cleanup

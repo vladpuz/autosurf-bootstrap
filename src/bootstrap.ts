@@ -1,20 +1,49 @@
-import colors from 'colors';
-import { createWebisidaCopies } from './utils/createWebisidaCopies';
-import { createSandboxieConfig } from './utils/createSandboxieConfig';
-import { createProxyCapConfig } from './utils/createProxyCapConfig';
-import { createStartBat } from './utils/createStartBat';
+import chalk from 'chalk';
+import { bootstrapWebisidas } from './bootstrap/bootstrapWebisidas';
+import { bootstrapSandboxie } from './bootstrap/bootstrapSandboxie';
+import { bootstrapProxyCap } from './bootstrap/bootstrapProxyCap';
+import { bootstrapStartBat } from './bootstrap/bootstrapStartBat';
 
 const bootstrap = async () => {
-  await createWebisidaCopies();
-  await createSandboxieConfig();
-  await createProxyCapConfig();
-  await createStartBat();
+  try {
+    await bootstrapWebisidas();
+    console.log(`Копирование Webisida - ${chalk.green('успешно')}`);
+  } catch (err) {
+    console.log(`Копирование Webisida - ${chalk.red('ошибка')}`, err);
+    throw err;
+  }
+
+  try {
+    await bootstrapSandboxie();
+    console.log(`Настройка Sandboxie - ${chalk.green('успешно')}`);
+  } catch (err) {
+    console.log(`Настройка Sandboxie - ${chalk.red('ошибка')}`, err);
+    throw err;
+  }
+
+  try {
+    await bootstrapProxyCap();
+    console.log(`Настройка ProxyCap - ${chalk.green('успешно')}`);
+  } catch (err) {
+    console.log(`Настройка ProxyCap - ${chalk.red('ошибка')}`, err);
+    throw err;
+  }
+
+  try {
+    await bootstrapStartBat();
+    console.log(`Создание start.bat - ${chalk.green('успешно')}`);
+  } catch (err) {
+    console.log(`Создание start.bat - ${chalk.red('ошибка')}`, err);
+    throw err;
+  }
 };
 
 bootstrap()
   .then(() => {
-    console.log(colors.green('\nВсе операции выполнены успешно'));
+    console.log();
+    console.log(chalk.bgGreen('Все операции выполнены успешно'));
   })
   .catch(() => {
-    console.log(colors.red('\nПроизошла непредвиденная ошибка'));
+    console.log();
+    console.log(chalk.bgRed('На одном из этапов произошла ошибка'));
   });
