@@ -3,8 +3,12 @@ import { cleanupWebisidas } from './cleanup/cleanupWebisidas';
 import { cleanupSandboxie } from './cleanup/cleanupSandboxie';
 import { cleanupProxyCap } from './cleanup/cleanupProxyCap';
 import { cleanupStartBat } from './cleanup/cleanupStartBat';
+import { cleanupAutoStart } from './cleanup/cleanupAutoStart';
+import { config } from '../settings/config';
 
 const cleanup = async () => {
+  const { autoStart } = config;
+
   try {
     await cleanupWebisidas();
     console.log(`Удаление копий Webisida - ${chalk.green('успешно')}`);
@@ -31,6 +35,15 @@ const cleanup = async () => {
     console.log(`Удаление start.bat - ${chalk.green('успешно')}`);
   } catch (err) {
     console.log(`Удаление start.bat - ${chalk.red('ошибка')}`, err);
+  }
+
+  if (autoStart) {
+    try {
+      await cleanupAutoStart();
+      console.log(`Удаление автозапуска - ${chalk.green('успешно')}`);
+    } catch (err) {
+      console.log(`Удаление автозапуска - ${chalk.red('ошибка')}`, err);
+    }
   }
 };
 

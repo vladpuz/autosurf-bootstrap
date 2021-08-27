@@ -3,8 +3,12 @@ import { bootstrapWebisidas } from './bootstrap/bootstrapWebisidas';
 import { bootstrapSandboxie } from './bootstrap/bootstrapSandboxie';
 import { bootstrapProxyCap } from './bootstrap/bootstrapProxyCap';
 import { bootstrapStartBat } from './bootstrap/bootstrapStartBat';
+import { bootstrapAutoStart } from './bootstrap/bootstrapAutoStart';
+import { config } from '../settings/config';
 
 const bootstrap = async () => {
+  const { autoStart } = config;
+
   try {
     await bootstrapWebisidas();
     console.log(`Копирование Webisida - ${chalk.green('успешно')}`);
@@ -35,6 +39,16 @@ const bootstrap = async () => {
   } catch (err) {
     console.log(`Создание start.bat - ${chalk.red('ошибка')}`, err);
     throw err;
+  }
+
+  if (autoStart) {
+    try {
+      bootstrapAutoStart();
+      console.log(`Создание автозапуска - ${chalk.green('успешно')}`);
+    } catch (err) {
+      console.log(`Создание автозапуска - ${chalk.red('ошибка')}`, err);
+      throw err;
+    }
   }
 };
 
