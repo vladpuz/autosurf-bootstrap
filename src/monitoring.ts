@@ -9,17 +9,14 @@ const loadInfo = {
   ram: [] as number[],
 };
 
-let firstInterval = true;
-
 const getLoadInfo = async () => {
   try {
-    const usedCpuPercent = await cpu.usage(firstInterval ? 0 : timeouts.monitoring * 1000);
+    const usedCpuPercent = await cpu.usage(0);
     const memInfo = await mem.used();
     const userMemGb = +(memInfo.usedMemMb / 1024).toFixed(2);
 
     loadInfo.cpu.push(usedCpuPercent);
     loadInfo.ram.push(userMemGb);
-    firstInterval = false;
 
     const cpuAverageLoad = (loadInfo.cpu.reduce((sum, load) => sum + load, 0) / loadInfo.cpu.length).toFixed(2);
     const ramAverageLoad = (loadInfo.ram.reduce((sum, load) => sum + load, 0) / loadInfo.ram.length).toFixed(2);
@@ -61,11 +58,17 @@ const getLoadInfo = async () => {
     console.log(`${time} Сбор данных - ${chalk.red('ошибка')}`, err);
     console.log();
   }
-
-  await getLoadInfo();
 };
 
 getLoadInfo()
+  .then(() => {
+    setInterval(() => {
+      getLoadInfo()
+        .catch((err) => {
+          console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
+        });
+    }, timeouts.monitoring * 1000);
+  })
   .catch((err) => {
     console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
   });
