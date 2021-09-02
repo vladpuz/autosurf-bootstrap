@@ -2,11 +2,12 @@
   "name": "autosurf-bootstrap",
   "private": true,
   "scripts": {
+    "start": "start.bat",
     "bootstrap": "ts-node src/bootstrap.ts",
     "cleanup": "ts-node src/cleanup.ts",
     "monitoring": "ts-node src/monitoring.ts",
     "test": "yarn run test:tsc && yarn run test:eslint",
-    "test:tsc": "tsc",
+    "test:tsc": "tsc --noEmit",
     "test:eslint": "eslint ."
   },
   "dependencies": {
@@ -19,13 +20,13 @@
   "devDependencies": {
     "@types/fs-extra": "^9.0.12",
     "@types/node-os-utils": "^1.2.0",
-    "@typescript-eslint/eslint-plugin": "^4.29.3",
-    "@typescript-eslint/parser": "^4.29.3",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
     "eslint": "^7.32.0",
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-config-airbnb-typescript": "^14.0.0",
     "eslint-plugin-import": "^2.24.2",
     "ts-node": "^10.2.1",
-    "typescript": "^4.3.5"
+    "typescript": "^4.4.2"
   }
 }

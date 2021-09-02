@@ -4,12 +4,15 @@
 export const config = {
   // Запуск автосерфингов с windows
   autoStart: true,
-  timeouts: {
-    // Задержка перед запуском автосерфингов
-    systemStart: 5,
-    // Задержка после запуска каждой копии любого автосерфинга
-    autosurfStart: 20,
-    // Интервал сбора данных мониторинга
-    monitoring: 60,
-  },
+  // Задержка перед запуском автосерфингов
+  systemStartTimeout: 5,
+  // Задержка после запуска каждой копии любого автосерфинга
+  surferStartTimeout: 10,
+  // Интервал сбора данных мониторинга
+  monitoringInterval: 60,
+  // Порядок запуска разных автосерфингов
+  surfersOrder: [
+    'webisida' as const,
+    'simple' as const,
+  ],
 };

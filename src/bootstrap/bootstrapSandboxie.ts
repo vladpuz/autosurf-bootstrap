@@ -1,15 +1,20 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { parseProxies } from '../utils/parseProxies';
+import { ProxyType } from '../types/ProxyType';
+import { ConfigType } from '../types/ConfigType';
 
-export const bootstrapSandboxie = async (): Promise<void> => {
-  const proxiesList = parseProxies();
+export const bootstrapSandboxie = async (proxies: ProxyType[], surfers: ConfigType['surfersOrder']): Promise<void> => {
   let config = await fs.readFile(path.join(__dirname, '../utils/Sandboxie.ini'), 'utf-16le');
 
-  proxiesList.forEach((proxy, i) => {
-    const webisidaPath = path.join(__dirname, `../../webisidas/webisida_${i + 1}`);
+  proxies.forEach((proxy, i) => {
+    let forceFolders = '';
+
+    surfers.forEach((surfer) => {
+      forceFolders += `ForceFolder=${path.join(__dirname, `../../surfers/${surfer}/copy_${i + 1}`)}\n`;
+    });
+
     config += `
-[webisida_${i + 1}]
+[sandbox_${i + 1}]
 
 Enabled=y
 AutoRecover=n
@@ -28,8 +33,7 @@ Template=Chrome_Phishing_DirectAccess
 Template=Firefox_Phishing_DirectAccess
 Template=AutoRecoverIgnore
 ConfigLevel=9
-ForceFolder=${webisidaPath}
-`;
+${forceFolders}`;
   });
 
   await fs.writeFile('C:/Windows/Sandboxie.ini', config, { encoding: 'utf-16le' });

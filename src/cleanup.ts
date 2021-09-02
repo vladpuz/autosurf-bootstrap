@@ -1,5 +1,5 @@
 import chalk from 'chalk';
-import { cleanupWebisidas } from './cleanup/cleanupWebisidas';
+import { cleanupSurfers } from './cleanup/cleanupSurfers';
 import { cleanupSandboxie } from './cleanup/cleanupSandboxie';
 import { cleanupProxyCap } from './cleanup/cleanupProxyCap';
 import { cleanupStartBat } from './cleanup/cleanupStartBat';
@@ -7,13 +7,13 @@ import { cleanupAutoStart } from './cleanup/cleanupAutoStart';
 import { config } from '../settings/config';
 
 const cleanup = async () => {
-  const { autoStart } = config;
+  const { autoStart, surfersOrder } = config;
 
   try {
-    await cleanupWebisidas();
-    console.log(`Удаление копий Webisida - ${chalk.green('успешно')}`);
+    await cleanupSurfers(surfersOrder);
+    console.log(`Удаление автосерфингов - ${chalk.green('успешно')}`);
   } catch (err) {
-    console.log(`Удаление копий Webisida - ${chalk.red('ошибка')}`, err);
+    console.log(`Удаление автосерфингов - ${chalk.red('ошибка')}`, err);
   }
 
   try {

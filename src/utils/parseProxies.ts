@@ -11,7 +11,7 @@ export const parseProxies = (): ProxyType[] => {
       if (split.length === 1) {
         return {
           ip: split[0].split(':')[0],
-          port: +split[0].split(':')[1],
+          port: +split[0].split(':')[1] || 80,
         };
       }
 
@@ -20,7 +20,7 @@ export const parseProxies = (): ProxyType[] => {
 
       return {
         ip,
-        port: +port || 8080,
+        port: +port || 80,
         login,
         password,
       };

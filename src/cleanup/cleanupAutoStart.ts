@@ -1,5 +1,5 @@
-import fs from 'fs-extra';
 import os from 'os';
+import fs from 'fs-extra';
 
 export const cleanupAutoStart = async (): Promise<void> => {
   const { username } = os.userInfo();

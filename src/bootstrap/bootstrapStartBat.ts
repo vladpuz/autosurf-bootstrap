@@ -1,31 +1,57 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { config } from '../../settings/config';
-import { parseProxies } from '../utils/parseProxies';
+import { ProxyType } from '../types/ProxyType';
+import { ConfigType } from '../types/ConfigType';
 
-export const bootstrapStartBat = async (): Promise<void> => {
-  const proxiesList = parseProxies();
-  const { autoStart, timeouts } = config;
-  const startBatPath = path.join(__dirname, '../../start.bat');
+export const bootstrapStartBat = async (
+  proxies: ProxyType[],
+  surfers: ConfigType['surfersOrder'],
+  config: {
+    autoStart: boolean,
+    systemStartTimeout: number,
+    surferStartTimeout: number,
+  },
+): Promise<void> => {
+  const { autoStart, systemStartTimeout, surferStartTimeout } = config;
+  let launching = '';
 
-  await fs.writeFile(startBatPath, `
-@echo off
+  surfers.forEach((surfer) => {
+    let originalPath = '';
+    let copyPath = '';
 
-${autoStart ? `
-echo Waiting for the system to be ready
-timeout ${timeouts.systemStart}
-` : ''}
+    switch (surfer) {
+      case 'webisida':
+        originalPath = `${path.join(__dirname, '../../surfers/webisida/copy/')} Webisida.Browser.exe`;
+        copyPath = `${path.join(__dirname, '../../surfers/webisida/copy_%%i')} Webisida.Browser.exe`;
+        break;
+      case 'simple':
+        originalPath = `${path.join(__dirname, '../../surfers/simple/copy')} SimpleSurfing.Client.exe`;
+        copyPath = `${path.join(__dirname, '../../surfers/simple/copy_%%i')} SimpleSurfing.Client.exe`;
+        break;
+      default:
+        return;
+    }
 
-echo Launch Webisida
-start ${path.join(__dirname, '../../webisidas/webisida/Webisida.Browser.exe')}
-timeout ${timeouts.autosurfStart}
+    launching += `
+echo Launch ${surfer}
+start /d ${originalPath}
+timeout ${surferStartTimeout}
 
-for /l %%i in (1, 1, ${proxiesList.length}) do (
-  echo Launch Webisida_%%i
-  start ${path.join(__dirname, '../../webisidas/webisida_%%i/Webisida.Browser.exe')}
-  timeout ${timeouts.autosurfStart}
+for /l %%i in (1, 1, ${proxies.length}) do (
+  echo Launch ${surfer}_%%i
+  start /d ${copyPath}
+  timeout ${surferStartTimeout}
 )
+`;
+  });
 
+  const delay = (autoStart && systemStartTimeout) ? `
+echo Waiting for the system to be ready
+timeout ${systemStartTimeout}` : '';
+
+  await fs.writeFile(path.join(__dirname, '../../start.bat'), `@echo off
+${delay}
+${launching}
 exit
 `);
 };

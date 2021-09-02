@@ -10,7 +10,8 @@
 
 # production
 /build
-/webisidas
+/surfers/**
+!/surfers/.gitkeep
 start.bat
 
 # misc

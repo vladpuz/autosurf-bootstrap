@@ -2,11 +2,21 @@ import chalk from 'chalk';
 import { cpu, mem } from 'node-os-utils';
 import { config } from '../settings/config';
 
-const { timeouts } = config;
+const { monitoringInterval } = config;
 
 const loadInfo = {
-  cpu: [] as number[],
-  ram: [] as number[],
+  cpu: {
+    all: [] as number[],
+    sum: 0,
+    max: 0,
+    min: 0,
+  },
+  ram: {
+    all: [] as number[],
+    sum: 0,
+    max: 0,
+    min: 0,
+  },
 };
 
 const getLoadInfo = async () => {
@@ -15,25 +25,42 @@ const getLoadInfo = async () => {
     const memInfo = await mem.used();
     const userMemGb = +(memInfo.usedMemMb / 1024).toFixed(2);
 
-    loadInfo.cpu.push(usedCpuPercent);
-    loadInfo.ram.push(userMemGb);
+    if (!loadInfo.cpu.all.length) {
+      loadInfo.cpu.max = usedCpuPercent;
+      loadInfo.cpu.min = usedCpuPercent;
+    }
 
-    const cpuAverageLoad = (loadInfo.cpu.reduce((sum, load) => sum + load, 0) / loadInfo.cpu.length).toFixed(2);
-    const ramAverageLoad = (loadInfo.ram.reduce((sum, load) => sum + load, 0) / loadInfo.ram.length).toFixed(2);
+    if (!loadInfo.ram.all.length) {
+      loadInfo.ram.max = userMemGb;
+      loadInfo.ram.min = userMemGb;
+    }
 
-    const cpuMaxLoad = (loadInfo.cpu.reduce((max, load) => (load > max ? load : max), loadInfo.cpu[0])).toFixed(2);
-    const ramMaxLoad = (loadInfo.ram.reduce((max, load) => (load > max ? load : max), loadInfo.ram[0])).toFixed(2);
+    loadInfo.cpu.all = [...loadInfo.cpu.all, usedCpuPercent].sort((a, b) => b - a);
+    loadInfo.ram.all = [...loadInfo.ram.all, userMemGb].sort((a, b) => b - a);
 
-    const cpuDesc = [...loadInfo.cpu].sort((a, b) => b - a);
-    const cpuDescPercent = cpuDesc.slice(0, Math.ceil(cpuDesc.length / 100));
-    const cpuMaxPercentLoad = (cpuDescPercent.reduce((sum, load) => sum + load, 0) / cpuDescPercent.length).toFixed(2);
+    loadInfo.cpu.sum += usedCpuPercent;
+    loadInfo.ram.sum += userMemGb;
 
-    const ramDesc = [...loadInfo.ram].sort((a, b) => b - a);
-    const ramDescPercent = ramDesc.slice(0, Math.ceil(ramDesc.length / 100));
-    const ramMaxPercentLoad = (ramDescPercent.reduce((sum, load) => sum + load, 0) / ramDescPercent.length).toFixed(2);
+    loadInfo.cpu.max = usedCpuPercent > loadInfo.cpu.max ? usedCpuPercent : loadInfo.cpu.max;
+    loadInfo.ram.max = userMemGb > loadInfo.ram.max ? userMemGb : loadInfo.ram.max;
 
-    const cpuMinLoad = (loadInfo.cpu.reduce((min, load) => (load < min ? load : min), loadInfo.cpu[0])).toFixed(2);
-    const ramMinLoad = (loadInfo.ram.reduce((min, load) => (load < min ? load : min), loadInfo.ram[0])).toFixed(2);
+    loadInfo.cpu.min = usedCpuPercent < loadInfo.cpu.min ? usedCpuPercent : loadInfo.cpu.min;
+    loadInfo.ram.min = userMemGb < loadInfo.ram.min ? userMemGb : loadInfo.ram.min;
+
+    const cpuAverageLoad = (loadInfo.cpu.sum / loadInfo.cpu.all.length).toFixed(2);
+    const ramAverageLoad = (loadInfo.ram.sum / loadInfo.ram.all.length).toFixed(2);
+
+    const cpuMinLoad = loadInfo.cpu.min.toFixed(2);
+    const ramMinLoad = loadInfo.ram.min.toFixed(2);
+
+    const cpuMaxLoad = loadInfo.cpu.max.toFixed(2);
+    const ramMaxLoad = loadInfo.ram.max.toFixed(2);
+
+    const cpuOnePercent = loadInfo.cpu.all.slice(0, Math.ceil(loadInfo.cpu.all.length / 100));
+    const cpuMaxPercentLoad = (cpuOnePercent.reduce((sum, load) => sum + load, 0) / cpuOnePercent.length).toFixed(2);
+
+    const ramOnePercent = loadInfo.ram.all.slice(0, Math.ceil(loadInfo.ram.all.length / 100));
+    const ramMaxPercentLoad = (ramOnePercent.reduce((sum, load) => sum + load, 0) / ramOnePercent.length).toFixed(2);
 
     const time = new Date().toLocaleTimeString();
 
@@ -41,14 +68,14 @@ const getLoadInfo = async () => {
     console.log(`Нагрузка процессора - ${chalk.cyan(`${usedCpuPercent}%`)}`);
     console.log(`Нагрузка памяти - ${chalk.cyan(`${userMemGb}gb`)}`);
     console.log();
+    console.log(`Минимальная нагрузка процессора - ${chalk.cyan(`${cpuMinLoad}%`)}`);
+    console.log(`Минимальная нагрузка памяти - ${chalk.cyan(`${ramMinLoad}gb`)}`);
+    console.log();
     console.log(`Максимальная нагрузка процессора - ${chalk.cyan(`${cpuMaxLoad}%`)}`);
     console.log(`Максимальная нагрузка памяти - ${chalk.cyan(`${ramMaxLoad}gb`)}`);
     console.log();
     console.log(`Максимально нагруженный 1% процессора - ${chalk.cyan(`${cpuMaxPercentLoad}%`)}`);
     console.log(`Максимально нагруженный 1% памяти - ${chalk.cyan(`${ramMaxPercentLoad}gb`)}`);
-    console.log();
-    console.log(`Минимальная нагрузка процессора - ${chalk.cyan(`${cpuMinLoad}%`)}`);
-    console.log(`Минимальная нагрузка памяти - ${chalk.cyan(`${ramMinLoad}gb`)}`);
     console.log();
     console.log(`Средняя нагрузка процессора - ${chalk.cyan(`${cpuAverageLoad}%`)}`);
     console.log(`Средняя нагрузка памяти - ${chalk.cyan(`${ramAverageLoad}gb`)}`);
@@ -67,7 +94,7 @@ getLoadInfo()
         .catch((err) => {
           console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
         });
-    }, timeouts.monitoring * 1000);
+    }, monitoringInterval * 1000);
   })
   .catch((err) => {
     console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
