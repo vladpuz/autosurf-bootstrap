@@ -1,19 +1,18 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { config } from '../../settings/config';
+import { config } from '../../config';
+import { SurfersType } from '../types/SurfersType';
 
-export const scanSurfers = async (): Promise<typeof config.surfersOrder> => {
+export const scanSurfers = async (): Promise<SurfersType> => {
   const { surfersOrder } = config;
 
-  const [webisida, simple] = await Promise.all([
-    fs.pathExists(path.join(__dirname, '../../surfers/webisida/copy')),
-    fs.pathExists(path.join(__dirname, '../../surfers/simple/copy')),
-  ]);
+  const readOperations = surfersOrder.map((surfer) => {
+    return fs.readdir(path.join(__dirname, `../../surfers/${surfer}/copy`));
+  });
 
-  const surfers = {
-    webisida,
-    simple,
-  };
+  const readData = await Promise.all(readOperations);
 
-  return surfersOrder.filter((surfer) => surfers[surfer]);
+  return readData
+    .filter((data) => data.length > 1)
+    .map((data, i) => surfersOrder[i]);
 };

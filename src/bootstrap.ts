@@ -6,12 +6,12 @@ import { bootstrapStartBat } from './bootstrap/bootstrapStartBat';
 import { bootstrapAutoStart } from './bootstrap/bootstrapAutoStart';
 import { parseProxies } from './utils/parseProxies';
 import { scanSurfers } from './utils/scanSurfers';
-import { config } from '../settings/config';
+import { config } from '../config';
 
 const bootstrap = async () => {
-  const proxies = parseProxies();
-  const surfers = await scanSurfers();
   const { autoStart, systemStartTimeout, surferStartTimeout } = config;
+  const proxies = await parseProxies();
+  const surfers = await scanSurfers();
 
   try {
     await bootstrapSurfers(proxies, surfers);

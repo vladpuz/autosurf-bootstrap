@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 import { cpu, mem } from 'node-os-utils';
-import { config } from '../settings/config';
+import { config } from '../config';
 
 const { monitoringInterval } = config;
 
@@ -21,8 +21,9 @@ const loadInfo = {
 
 const getLoadInfo = async () => {
   try {
-    const usedCpuPercent = await cpu.usage(0);
+    const cpuInfo = await cpu.usage(0);
     const memInfo = await mem.used();
+    const usedCpuPercent = +cpuInfo.toFixed(2);
     const userMemGb = +(memInfo.usedMemMb / 1024).toFixed(2);
 
     if (!loadInfo.cpu.all.length) {

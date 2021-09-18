@@ -7,7 +7,7 @@ export const cleanupSurfers = async (surfers: ConfigType['surfersOrder']): Promi
     return fs.readdir(path.join(__dirname, `../../surfers/${surfer}`))
       .then((files) => {
         files
-          .filter((file) => file !== 'copy')
+          .filter((file) => file !== 'copy' && file !== 'proxies.txt')
           .map((file) => {
             return fs.remove(path.join(__dirname, `../../surfers/${surfer}/${file}`));
           });

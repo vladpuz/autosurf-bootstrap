@@ -10,8 +10,6 @@
 
 # production
 /build
-/surfers/**
-!/surfers/.gitkeep
 start.bat
 
 # misc
@@ -28,6 +26,36 @@ yarn-error.log*
 .env.development.local
 .env.test.local
 .env.production.local
+
+# webisida
+/surfers/webisida/**
+!/surfers/webisida/*
+!/surfers/webisida/copy/.gitkeep
+!/surfers/webisida/proxies.txt
+
+# simple
+/surfers/simple/**
+!/surfers/simple/*
+!/surfers/simple/copy/.gitkeep
+!/surfers/simple/proxies.txt
+
+# vipip
+/surfers/vipip/**
+!/surfers/vipip/*
+!/surfers/vipip/copy/.gitkeep
+!/surfers/vipip/proxies.txt
+
+# waspace
+/surfers/waspace/**
+!/surfers/waspace/*
+!/surfers/waspace/copy/.gitkeep
+!/surfers/waspace/proxies.txt
+
+# jetswap
+/surfers/jetswap/**
+!/surfers/jetswap/*
+!/surfers/jetswap/copy/.gitkeep
+!/surfers/jetswap/proxies.txt
 
 # ide
 /.idea

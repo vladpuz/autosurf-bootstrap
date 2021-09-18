@@ -1,12 +1,24 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { ProxyType } from '../types/ProxyType';
-import { ConfigType } from '../types/ConfigType';
+import { ProxiesType } from '../types/ProxiesType';
+import { SurfersType } from '../types/SurfersType';
 
-export const bootstrapSandboxie = async (proxies: ProxyType[], surfers: ConfigType['surfersOrder']): Promise<void> => {
+export const bootstrapSandboxie = async (proxies: ProxiesType, surfers: SurfersType): Promise<void> => {
   let config = await fs.readFile(path.join(__dirname, '../utils/Sandboxie.ini'), 'utf-16le');
 
-  proxies.forEach((proxy, i) => {
+  let maxCopiesName: SurfersType[number] = surfers[0];
+  let maxCopiesLength = 0;
+
+  Object
+    .entries(proxies)
+    .forEach(([key, value]) => {
+      if (value.length > maxCopiesLength) {
+        maxCopiesName = key as SurfersType[number];
+        maxCopiesLength = value.length;
+      }
+    });
+
+  proxies[maxCopiesName].forEach((proxy, i) => {
     let forceFolders = '';
 
     surfers.forEach((surfer) => {

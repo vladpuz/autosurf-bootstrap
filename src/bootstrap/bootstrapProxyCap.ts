@@ -1,12 +1,12 @@
 import path from 'path';
 import fs from 'fs-extra';
 import xmlbuilder from 'xmlbuilder';
-import { exec } from 'child_process';
+import { execSync } from 'child_process';
 import { ProxyCapConfigType } from '../types/ProxyCapConfigType';
-import { ProxyType } from '../types/ProxyType';
-import { ConfigType } from '../types/ConfigType';
+import { ProxiesType } from '../types/ProxiesType';
+import { SurfersType } from '../types/SurfersType';
 
-export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigType['surfersOrder']): Promise<void> => {
+export const bootstrapProxyCap = async (proxies: ProxiesType, surfers: SurfersType): Promise<void> => {
   const config: ProxyCapConfigType = {
     proxycap_ruleset: {
       '@version': 535,
@@ -19,35 +19,44 @@ export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigTyp
     },
   };
 
-  proxies.forEach((proxy, i) => {
-    const { ip, port, login, password } = proxy;
-    const authMethod = (login && password) ? 'password' : 'none';
-    const proxyName = `proxy_${i + 1}`;
+  surfers.forEach((surfer) => {
+    proxies[surfer].forEach((proxy, i) => {
+      const { ip, port, login, password } = proxy;
+      const authMethod = (login && password) ? 'password' : 'none';
+      const proxyName = `proxy_${surfer}_${i + 1}`;
 
-    config.proxycap_ruleset.proxy_servers.proxy_server.push({
-      '@name': proxyName,
-      '@type': 'socks5',
-      '@hostname': ip,
-      '@port': port,
-      '@auth_method': authMethod,
-      '@username': authMethod === 'password' ? login : null,
-      '@password': authMethod === 'password' ? password : null,
-      '@is_default': i === 0,
-    });
+      config.proxycap_ruleset.proxy_servers.proxy_server.push({
+        '@name': proxyName,
+        '@type': 'socks5',
+        '@hostname': ip,
+        '@port': port,
+        '@auth_method': authMethod,
+        '@username': authMethod === 'password' ? login : null,
+        '@password': authMethod === 'password' ? password : null,
+        '@is_default': surfer === surfers[0] && i === 0,
+      });
 
-    surfers.forEach((surfer) => {
       const ruleName = `${surfer}_${i + 1}`;
-      let program: ProxyCapConfigType['proxycap_ruleset']['routing_rules']['routing_rule'][number]['programs']['program'] = [];
+      const basePath = path.join(__dirname, `../../surfers/${surfer}/copy_${i + 1}`);
+      let program: Array<{ '@path': string, '@dir_included': boolean }> = [];
 
       switch (surfer) {
         case 'webisida':
           program = [
             {
-              '@path': path.join(__dirname, `../../surfers/webisida/copy_${i + 1}/Webisida.Browser.exe`),
+              '@path': path.join(basePath, 'Webisida.Browser.exe'),
               '@dir_included': true,
             },
             {
-              '@path': path.join(__dirname, `../../surfers/webisida/copy_${i + 1}/gecko/SecureSurf.Browser.Client.exe`),
+              '@path': path.join(basePath, 'gecko/SecureSurf.Browser.Client.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'gecko/plugin-container.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'gecko/FlashPlayerPlugin_32_0_0_142.exe'),
               '@dir_included': true,
             },
           ];
@@ -55,7 +64,79 @@ export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigTyp
         case 'simple':
           program = [
             {
-              '@path': path.join(__dirname, `../../surfers/simple/copy_${i + 1}/SimpleSurfing.Client.exe`),
+              '@path': path.join(basePath, 'SimpleSurfing.Client.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'SimpleSurfing.Restarter.exe'),
+              '@dir_included': true,
+            },
+          ];
+          break;
+        case 'vipip':
+          program = [
+            {
+              '@path': path.join(basePath, 'VipIpClnt.exe'),
+              '@dir_included': true,
+            },
+          ];
+          break;
+        case 'waspace':
+          program = [
+            {
+              '@path': path.join(basePath, 'waspwing.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'wahiver64.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'WAScribe.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'launcher.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'wasp.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'wahiver.exe'),
+              '@dir_included': true,
+            },
+          ];
+          break;
+        case 'jetswap':
+          program = [
+            {
+              '@path': path.join(basePath, 'safesurf.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'SurfGuard.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'prtest.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'f/cg.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'f/jet.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'f/1/plugin-container.exe'),
+              '@dir_included': true,
+            },
+            {
+              '@path': path.join(basePath, 'f/1/plugin-hang-ui.exe'),
               '@dir_included': true,
             },
           ];
@@ -67,7 +148,7 @@ export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigTyp
       config.proxycap_ruleset.routing_rules.routing_rule.push({
         '@name': ruleName,
         '@action': 'proxy',
-        '@remote_dns': false,
+        '@remote_dns': true,
         '@transports': 'all',
         '@disabled': false,
         proxy_or_chain: {
@@ -75,18 +156,6 @@ export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigTyp
         },
         programs: {
           program,
-        },
-        ports: {
-          port_range: [
-            {
-              '@first': 80,
-              '@last': 80,
-            },
-            {
-              '@first': 443,
-              '@last': 443,
-            },
-          ],
         },
       });
     });
@@ -96,9 +165,19 @@ export const bootstrapProxyCap = async (proxies: ProxyType[], surfers: ConfigTyp
   const configPath = path.join(__dirname, '../utils/machine.xml');
 
   await fs.writeFile(configPath, configXml);
-  exec(
-    '.\\xml2prs.exe .\\machine.xml C:\\ProgramData\\ProxyCap\\machine.prs',
-    { cwd: path.join(__dirname, '../utils') },
-    () => fs.removeSync(configPath),
-  );
+
+  try {
+    execSync(
+      '.\\xml2prs.exe .\\machine.xml C:\\ProgramData\\ProxyCap\\machine.prs',
+      { cwd: path.join(__dirname, '../utils') },
+    );
+  } catch (err) {
+    if (err instanceof Error) {
+      if (!err.message.includes('Command failed')) {
+        throw err;
+      }
+    }
+  } finally {
+    fs.removeSync(configPath);
+  }
 };

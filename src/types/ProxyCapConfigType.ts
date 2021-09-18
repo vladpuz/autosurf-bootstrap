@@ -23,13 +23,13 @@ export type ProxyCapConfigType = {
         proxy_or_chain: {
           '@name': string
         }
-        programs: {
+        programs?: {
           program: Array<{
             '@path': string
             '@dir_included': boolean
           }>
         }
-        ports: {
+        ports?: {
           port_range: Array<{
             '@first': number
             '@last': number

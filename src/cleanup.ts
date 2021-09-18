@@ -4,7 +4,7 @@ import { cleanupSandboxie } from './cleanup/cleanupSandboxie';
 import { cleanupProxyCap } from './cleanup/cleanupProxyCap';
 import { cleanupStartBat } from './cleanup/cleanupStartBat';
 import { cleanupAutoStart } from './cleanup/cleanupAutoStart';
-import { config } from '../settings/config';
+import { config } from '../config';
 
 const cleanup = async () => {
   const { autoStart, surfersOrder } = config;

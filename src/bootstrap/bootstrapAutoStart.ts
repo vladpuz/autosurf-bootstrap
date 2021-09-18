@@ -6,7 +6,7 @@ export const bootstrapAutoStart = (): void => {
   const { username } = os.userInfo();
 
   windowsShortcuts.create(
-    `C:/Users/${username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/autosurf.lnk`,
+    `C:/Users/${username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/Autosurf.lnk`,
     path.join(__dirname, '../../start.bat'),
   );
 };

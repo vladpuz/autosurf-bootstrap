@@ -9,10 +9,13 @@ export const config = {
   // Задержка после запуска каждой копии любого автосерфинга
   surferStartTimeout: 10,
   // Интервал сбора данных мониторинга
-  monitoringInterval: 60,
+  monitoringInterval: 10,
   // Порядок запуска разных автосерфингов
   surfersOrder: [
-    'webisida' as const,
-    'simple' as const,
-  ],
+    'webisida',
+    'simple',
+    'vipip',
+    'waspace',
+    'jetswap',
+  ] as const,
 };

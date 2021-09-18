@@ -1,28 +1,43 @@
-import { proxies } from '../../settings/proxies';
-import { ProxyType } from '../types/ProxyType';
+import path from 'path';
+import fs from 'fs-extra';
+import { config } from '../../config';
+import { ProxiesType } from '../types/ProxiesType';
 
-export const parseProxies = (): ProxyType[] => {
-  return proxies
-    .split('\n')
-    .filter((proxy) => proxy)
-    .map((proxy) => {
-      const split = proxy.split('@');
+export const parseProxies = async (): Promise<ProxiesType> => {
+  const { surfersOrder } = config;
 
-      if (split.length === 1) {
+  const readOperations = surfersOrder.map((surfer) => {
+    return fs.readFile(path.join(__dirname, `../../surfers/${surfer}/proxies.txt`), 'utf-8');
+  });
+
+  const readData = await Promise.all(readOperations);
+  const entries = readData.map((list, i) => {
+    const proxyList = list
+      .split('\n')
+      .filter((proxy) => proxy)
+      .map((proxy) => {
+        const split = proxy.split('@');
+
+        if (split.length === 1) {
+          return {
+            ip: split[0].split(':')[0],
+            port: +split[0].split(':')[1] || 80,
+          };
+        }
+
+        const [login, password] = split[0].split(':');
+        const [ip, port] = split[1].split(':');
+
         return {
-          ip: split[0].split(':')[0],
-          port: +split[0].split(':')[1] || 80,
+          ip,
+          port: +port || 80,
+          login,
+          password,
         };
-      }
+      });
 
-      const [login, password] = split[0].split(':');
-      const [ip, port] = split[1].split(':');
+    return [surfersOrder[i], proxyList];
+  });
 
-      return {
-        ip,
-        port: +port || 80,
-        login,
-        password,
-      };
-    });
+  return Object.fromEntries(entries) as ProxiesType;
 };

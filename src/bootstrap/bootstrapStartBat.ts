@@ -1,11 +1,11 @@
 import path from 'path';
 import fs from 'fs-extra';
-import { ProxyType } from '../types/ProxyType';
-import { ConfigType } from '../types/ConfigType';
+import { ProxiesType } from '../types/ProxiesType';
+import { SurfersType } from '../types/SurfersType';
 
 export const bootstrapStartBat = async (
-  proxies: ProxyType[],
-  surfers: ConfigType['surfersOrder'],
+  proxies: ProxiesType,
+  surfers: SurfersType,
   config: {
     autoStart: boolean,
     systemStartTimeout: number,
@@ -28,6 +28,18 @@ export const bootstrapStartBat = async (
         originalPath = `${path.join(__dirname, '../../surfers/simple/copy')} SimpleSurfing.Client.exe`;
         copyPath = `${path.join(__dirname, '../../surfers/simple/copy_%%i')} SimpleSurfing.Client.exe`;
         break;
+      case 'vipip':
+        originalPath = `${path.join(__dirname, '../../surfers/vipip/copy')} VipIpClnt.exe`;
+        copyPath = `${path.join(__dirname, '../../surfers/vipip/copy_%%i')} VipIpClnt.exe`;
+        break;
+      case 'waspace':
+        originalPath = `${path.join(__dirname, '../../surfers/waspace/copy')} wahiver64.exe`;
+        copyPath = `${path.join(__dirname, '../../surfers/waspace/copy_%%i')} wahiver64.exe`;
+        break;
+      case 'jetswap':
+        originalPath = `${path.join(__dirname, '../../surfers/jetswap/copy')} safesurf.exe`;
+        copyPath = `${path.join(__dirname, '../../surfers/jetswap/copy_%%i')} safesurf.exe`;
+        break;
       default:
         return;
     }
@@ -36,13 +48,17 @@ export const bootstrapStartBat = async (
 echo Launch ${surfer}
 start /d ${originalPath}
 timeout ${surferStartTimeout}
+`;
 
-for /l %%i in (1, 1, ${proxies.length}) do (
+    if (proxies[surfer].length) {
+      launching += `
+for /l %%i in (1, 1, ${proxies[surfer].length}) do (
   echo Launch ${surfer}_%%i
   start /d ${copyPath}
   timeout ${surferStartTimeout}
 )
 `;
+    }
   });
 
   const delay = (autoStart && systemStartTimeout) ? `
