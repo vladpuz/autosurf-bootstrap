@@ -128,9 +128,9 @@
   integrity sha512-sstDo2s8gQR/Qh2Bd6yNQ5xJv+D4ttyB9ZVjB3mBm3VkGl2RoqjV7fiw9mIHLbshHSRm2m8uf0XrIRQNWB/z6A==
 
 "@types/node@*":
-  version "16.9.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.2.tgz#81f5a039d6ed1941f8cc57506c74e7c2b8fc64b9"
-  integrity sha512-ZHty/hKoOLZvSz6BtP1g7tc7nUeJhoCf3flLjh8ZEv1vFKBWHXcnMbJMyN/pftSljNyy0kNW/UqI3DccnBnZ8w==
+  version "16.9.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-16.9.3.tgz#92230abb80a66beb10236e78a51cd9e6396f4489"
+  integrity sha512-5UmMznRvrwKqisJ458JbNoq3AyXHxlAKMkGtNe143W1SkZ1BVgvCHYBzn7wD66J+smE+BolqA1mes5BeXlWY6w==
 
 "@typescript-eslint/eslint-plugin@^4.31.1":
   version "4.31.1"
