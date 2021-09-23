@@ -21,24 +21,24 @@ export const bootstrapStartBat = async (
 
     switch (surfer) {
       case 'webisida':
-        originalPath = `${path.join(__dirname, '../../surfers/webisida/copy/')} Webisida.Browser.exe`;
-        copyPath = `${path.join(__dirname, '../../surfers/webisida/copy_%%i')} Webisida.Browser.exe`;
+        originalPath = `"${path.join(__dirname, '../../surfers/webisida/copy/')}" Webisida.Browser.exe`;
+        copyPath = `"${path.join(__dirname, '../../surfers/webisida/copy_%%i')}" Webisida.Browser.exe`;
         break;
       case 'simple':
-        originalPath = `${path.join(__dirname, '../../surfers/simple/copy')} SimpleSurfing.Client.exe`;
-        copyPath = `${path.join(__dirname, '../../surfers/simple/copy_%%i')} SimpleSurfing.Client.exe`;
+        originalPath = `"${path.join(__dirname, '../../surfers/simple/copy')}" SimpleSurfing.Client.exe`;
+        copyPath = `"${path.join(__dirname, '../../surfers/simple/copy_%%i')}" SimpleSurfing.Client.exe`;
         break;
       case 'vipip':
-        originalPath = `${path.join(__dirname, '../../surfers/vipip/copy')} VipIpClnt.exe`;
-        copyPath = `${path.join(__dirname, '../../surfers/vipip/copy_%%i')} VipIpClnt.exe`;
+        originalPath = `"${path.join(__dirname, '../../surfers/vipip/copy')}" VipIpClnt.exe`;
+        copyPath = `"${path.join(__dirname, '../../surfers/vipip/copy_%%i')}" VipIpClnt.exe`;
         break;
       case 'waspace':
-        originalPath = `${path.join(__dirname, '../../surfers/waspace/copy')} wahiver64.exe`;
-        copyPath = `${path.join(__dirname, '../../surfers/waspace/copy_%%i')} wahiver64.exe`;
+        originalPath = `"${path.join(__dirname, '../../surfers/waspace/copy')}" wahiver64.exe`;
+        copyPath = `"${path.join(__dirname, '../../surfers/waspace/copy_%%i')}" wahiver64.exe`;
         break;
       case 'jetswap':
-        originalPath = `${path.join(__dirname, '../../surfers/jetswap/copy')} safesurf.exe`;
-        copyPath = `${path.join(__dirname, '../../surfers/jetswap/copy_%%i')} safesurf.exe`;
+        originalPath = `"${path.join(__dirname, '../../surfers/jetswap/copy')}" safesurf.exe`;
+        copyPath = `"${path.join(__dirname, '../../surfers/jetswap/copy_%%i')}" safesurf.exe`;
         break;
       default:
         return;
