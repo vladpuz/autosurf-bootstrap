@@ -1,3 +1,4 @@
+import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { cleanupSurfers } from './cleanup/cleanupSurfers';
 import { cleanupSandboxie } from './cleanup/cleanupSandboxie';
@@ -7,6 +8,13 @@ import { cleanupAutoStart } from './cleanup/cleanupAutoStart';
 import { config } from '../config';
 
 const cleanup = async () => {
+  const admin = await isAdmin();
+
+  if (!admin) {
+    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+    return;
+  }
+
   const { autoStart, surfersOrder } = config;
 
   try {

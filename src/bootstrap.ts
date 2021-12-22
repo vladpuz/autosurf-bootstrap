@@ -1,3 +1,4 @@
+import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { bootstrapSurfers } from './bootstrap/bootstrapSurfers';
 import { bootstrapSandboxie } from './bootstrap/bootstrapSandboxie';
@@ -9,6 +10,13 @@ import { scanSurfers } from './utils/scanSurfers';
 import { config } from '../config';
 
 const bootstrap = async () => {
+  const admin = await isAdmin();
+
+  if (!admin) {
+    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+    return;
+  }
+
   const { autoStart, systemStartTimeout, surferStartTimeout } = config;
   const proxies = await parseProxies();
   const surfers = await scanSurfers();

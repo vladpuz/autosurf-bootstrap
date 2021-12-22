@@ -1,3 +1,4 @@
+import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { cpu, mem } from 'node-os-utils';
 import { config } from '../config';
@@ -20,6 +21,13 @@ const loadInfo = {
 };
 
 const getLoadInfo = async () => {
+  const admin = await isAdmin();
+
+  if (!admin) {
+    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+    return;
+  }
+
   try {
     const cpuInfo = await cpu.usage(0);
     const memInfo = await mem.used();
