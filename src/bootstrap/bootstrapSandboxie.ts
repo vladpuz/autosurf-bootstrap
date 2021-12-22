@@ -27,7 +27,6 @@ export const bootstrapSandboxie = async (proxies: ProxiesType, surfers: SurfersT
 
     config += `
 [sandbox_${i + 1}]
-
 Enabled=y
 AutoRecover=n
 BlockNetworkFiles=y
