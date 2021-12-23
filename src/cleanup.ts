@@ -8,13 +8,6 @@ import { cleanupAutoStart } from './cleanup/cleanupAutoStart';
 import { config } from '../config';
 
 const cleanup = async () => {
-  const admin = await isAdmin();
-
-  if (!admin) {
-    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-    return;
-  }
-
   const { autoStart, surfersOrder } = config;
 
   try {
@@ -55,12 +48,23 @@ const cleanup = async () => {
   }
 };
 
-cleanup()
-  .then(() => {
-    console.log();
-    console.log(chalk.bgGreen('Очистка произведена'));
+isAdmin()
+  .then((admin) => {
+    if (!admin) {
+      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+      return;
+    }
+
+    cleanup()
+      .then(() => {
+        console.log();
+        console.log(chalk.bgGreen('Очистка произведена'));
+      })
+      .catch(() => {
+        console.log();
+        console.log(chalk.bgRed('Произошла непредвиденная ошибка'));
+      });
   })
   .catch(() => {
-    console.log();
-    console.log(chalk.bgRed('Произошла непредвиденная ошибка'));
+    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
   });

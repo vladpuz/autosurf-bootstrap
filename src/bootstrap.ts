@@ -10,13 +10,6 @@ import { scanSurfers } from './utils/scanSurfers';
 import { config } from '../config';
 
 const bootstrap = async () => {
-  const admin = await isAdmin();
-
-  if (!admin) {
-    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-    return;
-  }
-
   const { autoStart, systemStartTimeout, surferStartTimeout } = config;
   const proxies = await parseProxies();
   const surfers = await scanSurfers();
@@ -64,12 +57,23 @@ const bootstrap = async () => {
   }
 };
 
-bootstrap()
-  .then(() => {
-    console.log();
-    console.log(chalk.bgGreen('Все операции выполнены успешно'));
+isAdmin()
+  .then((admin) => {
+    if (!admin) {
+      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+      return;
+    }
+
+    bootstrap()
+      .then(() => {
+        console.log();
+        console.log(chalk.bgGreen('Все операции выполнены успешно'));
+      })
+      .catch(() => {
+        console.log();
+        console.log(chalk.bgRed('На одном из этапов произошла ошибка'));
+      });
   })
   .catch(() => {
-    console.log();
-    console.log(chalk.bgRed('На одном из этапов произошла ошибка'));
+    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
   });

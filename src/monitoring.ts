@@ -21,13 +21,6 @@ const loadInfo = {
 };
 
 const getLoadInfo = async () => {
-  const admin = await isAdmin();
-
-  if (!admin) {
-    console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-    return;
-  }
-
   try {
     const cpuInfo = await cpu.usage(0);
     const memInfo = await mem.used();
@@ -96,15 +89,26 @@ const getLoadInfo = async () => {
   }
 };
 
-getLoadInfo()
-  .then(() => {
-    setInterval(() => {
-      getLoadInfo()
-        .catch((err) => {
-          console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
-        });
-    }, monitoringInterval * 1000);
+isAdmin()
+  .then((admin) => {
+    if (!admin) {
+      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
+      return;
+    }
+
+    getLoadInfo()
+      .then(() => {
+        setInterval(() => {
+          getLoadInfo()
+            .catch((err) => {
+              console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
+            });
+        }, monitoringInterval * 1000);
+      })
+      .catch((err) => {
+        console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
+      });
   })
-  .catch((err) => {
-    console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
+  .catch(() => {
+    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
   });
