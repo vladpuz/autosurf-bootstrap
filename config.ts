@@ -14,8 +14,5 @@ export const config = {
   surfersOrder: [
     'webisida',
     'simple',
-    'vipip',
-    'waspace',
-    'jetswap',
   ] as const,
 };
