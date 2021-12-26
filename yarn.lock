@@ -107,9 +107,9 @@
   integrity sha512-sstDo2s8gQR/Qh2Bd6yNQ5xJv+D4ttyB9ZVjB3mBm3VkGl2RoqjV7fiw9mIHLbshHSRm2m8uf0XrIRQNWB/z6A==
 
 "@types/node@*":
-  version "17.0.3"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.3.tgz#4b086e316ed4504f49bd78135d48642bf50aa135"
-  integrity sha512-bAKB1GcA28FR/D8HHQ5U4FYk7nvoZdp7TZSy9oIyQ8gpYCzpeESa3LCK2TbeocXic7GwIXCkCItJg0DttO3ZaQ==
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-17.0.5.tgz#57ca67ec4e57ad9e4ef5a6bab48a15387a1c83e0"
+  integrity sha512-w3mrvNXLeDYV1GKTZorGJQivK6XLCoGwpnyJFbJVK/aTBQUxOCaa/GlFAAN3OTDFcb7h5tiFG+YXCO2By+riZw==
 
 "@typescript-eslint/eslint-plugin@^5.8.0":
   version "5.8.0"
