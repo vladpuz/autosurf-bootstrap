@@ -6,7 +6,10 @@ import { ProxyCapConfigType } from '../types/ProxyCapConfigType';
 import { ProxiesType } from '../types/ProxiesType';
 import { SurfersType } from '../types/SurfersType';
 
-export const bootstrapProxyCap = async (proxies: ProxiesType, surfers: SurfersType): Promise<void> => {
+export const bootstrapProxyCap = async (
+  proxies: ProxiesType,
+  surfers: SurfersType,
+): Promise<void> => {
   const config: ProxyCapConfigType = {
     proxycap_ruleset: {
       '@version': 535,
@@ -21,7 +24,13 @@ export const bootstrapProxyCap = async (proxies: ProxiesType, surfers: SurfersTy
 
   surfers.forEach((surfer) => {
     proxies[surfer].forEach((proxy, i) => {
-      const { ip, port, login, password } = proxy;
+      const {
+        ip,
+        port,
+        login,
+        password,
+      } = proxy;
+
       const authMethod = (login && password) ? 'password' : 'none';
       const proxyName = `proxy_${surfer}_${i + 1}`;
 

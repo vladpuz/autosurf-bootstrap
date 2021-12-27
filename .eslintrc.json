@@ -22,10 +22,8 @@
     "plugin:@typescript-eslint/recommended-requiring-type-checking"
   ],
   "rules": {
-    "max-len": "off",
     "no-console": "off",
     "arrow-body-style": "off",
-    "object-curly-newline": "off",
     "import/prefer-default-export": "off"
   }
 }
