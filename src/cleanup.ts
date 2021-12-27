@@ -1,4 +1,3 @@
-import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { cleanupSurfers } from './cleanup/cleanupSurfers';
 import { cleanupSandboxie } from './cleanup/cleanupSandboxie';
@@ -48,23 +47,12 @@ const cleanup = async () => {
   }
 };
 
-isAdmin()
-  .then((admin) => {
-    if (!admin) {
-      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-      return;
-    }
-
-    cleanup()
-      .then(() => {
-        console.log();
-        console.log(chalk.bgGreen('Очистка произведена'));
-      })
-      .catch(() => {
-        console.log();
-        console.log(chalk.bgRed('Произошла непредвиденная ошибка'));
-      });
+cleanup()
+  .then(() => {
+    console.log();
+    console.log(chalk.bgGreen('Очистка произведена'));
   })
   .catch(() => {
-    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
+    console.log();
+    console.log(chalk.bgRed('Произошла непредвиденная ошибка'));
   });

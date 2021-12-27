@@ -1,4 +1,3 @@
-import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { cpu, mem } from 'node-os-utils';
 import { config } from '../config';
@@ -59,10 +58,12 @@ const getLoadInfo = async () => {
     const ramMaxLoad = loadInfo.ram.max.toFixed(2);
 
     const cpuOnePercent = loadInfo.cpu.all.slice(0, Math.ceil(loadInfo.cpu.all.length / 100));
-    const cpuMaxPercentLoad = (cpuOnePercent.reduce((sum, load) => sum + load, 0) / cpuOnePercent.length).toFixed(2);
+    const cpuOnePercentSum = cpuOnePercent.reduce((sum, load) => sum + load, 0);
+    const cpuMaxPercentLoad = (cpuOnePercentSum / cpuOnePercent.length).toFixed(2);
 
     const ramOnePercent = loadInfo.ram.all.slice(0, Math.ceil(loadInfo.ram.all.length / 100));
-    const ramMaxPercentLoad = (ramOnePercent.reduce((sum, load) => sum + load, 0) / ramOnePercent.length).toFixed(2);
+    const ramOnePercentSum = ramOnePercent.reduce((sum, load) => sum + load, 0);
+    const ramMaxPercentLoad = (ramOnePercentSum / ramOnePercent.length).toFixed(2);
 
     const time = new Date().toLocaleTimeString();
 
@@ -89,26 +90,15 @@ const getLoadInfo = async () => {
   }
 };
 
-isAdmin()
-  .then((admin) => {
-    if (!admin) {
-      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-      return;
-    }
-
-    getLoadInfo()
-      .then(() => {
-        setInterval(() => {
-          getLoadInfo()
-            .catch((err) => {
-              console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
-            });
-        }, monitoringInterval * 1000);
-      })
-      .catch((err) => {
-        console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
-      });
+getLoadInfo()
+  .then(() => {
+    setInterval(() => {
+      getLoadInfo()
+        .catch((err) => {
+          console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
+        });
+    }, monitoringInterval * 1000);
   })
-  .catch(() => {
-    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
+  .catch((err) => {
+    console.log(chalk.bgRed('Ошибка запуска мониторинга'), err);
   });

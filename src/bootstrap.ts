@@ -1,4 +1,3 @@
-import isAdmin from 'is-admin';
 import chalk from 'chalk';
 import { bootstrapSurfers } from './bootstrap/bootstrapSurfers';
 import { bootstrapSandboxie } from './bootstrap/bootstrapSandboxie';
@@ -39,7 +38,11 @@ const bootstrap = async () => {
   }
 
   try {
-    await bootstrapStartBat(proxies, surfers, { autoStart, systemStartTimeout, surferStartTimeout });
+    await bootstrapStartBat(proxies, surfers, {
+      autoStart,
+      systemStartTimeout,
+      surferStartTimeout,
+    });
     console.log(`Создание start.bat - ${chalk.green('успешно')}`);
   } catch (err) {
     console.log(`Создание start.bat - ${chalk.red('ошибка')}`, err);
@@ -57,23 +60,12 @@ const bootstrap = async () => {
   }
 };
 
-isAdmin()
-  .then((admin) => {
-    if (!admin) {
-      console.log(chalk.bgRed('Запустите консоль от имени администратора'));
-      return;
-    }
-
-    bootstrap()
-      .then(() => {
-        console.log();
-        console.log(chalk.bgGreen('Все операции выполнены успешно'));
-      })
-      .catch(() => {
-        console.log();
-        console.log(chalk.bgRed('На одном из этапов произошла ошибка'));
-      });
+bootstrap()
+  .then(() => {
+    console.log();
+    console.log(chalk.bgGreen('Все операции выполнены успешно'));
   })
   .catch(() => {
-    console.log(chalk.bgRed('Ошибка проверки прав администратора'));
+    console.log();
+    console.log(chalk.bgRed('На одном из этапов произошла ошибка'));
   });
