@@ -50,7 +50,7 @@ const cleanup = async () => {
 cleanup()
   .then(() => {
     console.log();
-    console.log(chalk.bgGreen('Очистка произведена'));
+    console.log(chalk.bgGreen('Очистка произведена успешно'));
   })
   .catch(() => {
     console.log();
