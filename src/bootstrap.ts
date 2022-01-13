@@ -1,9 +1,9 @@
 import chalk from 'chalk';
-import { bootstrapSurfers } from './bootstrap/bootstrapSurfers';
-import { bootstrapSandboxie } from './bootstrap/bootstrapSandboxie';
-import { bootstrapProxyCap } from './bootstrap/bootstrapProxyCap';
-import { bootstrapStartBat } from './bootstrap/bootstrapStartBat';
-import { bootstrapAutoStart } from './bootstrap/bootstrapAutoStart';
+import { copySurfers } from './bootstrap/copySurfers';
+import { configureSandboxie } from './bootstrap/configureSandboxie';
+import { configureProxyCap } from './bootstrap/configureProxyCap';
+import { createStartBat } from './bootstrap/createStartBat';
+import { createAutoStart } from './bootstrap/createAutoStart';
 import { parseProxies } from './utils/parseProxies';
 import { scanSurfers } from './utils/scanSurfers';
 import { config } from '../config';
@@ -14,7 +14,7 @@ const bootstrap = async () => {
   const surfers = await scanSurfers();
 
   try {
-    await bootstrapSurfers(proxies, surfers);
+    await copySurfers(proxies, surfers);
     console.log(`Копирование автосерфингов - ${chalk.green('успешно')}`);
   } catch (err) {
     console.log(`Копирование автосерфингов - ${chalk.red('ошибка')}`, err);
@@ -22,7 +22,7 @@ const bootstrap = async () => {
   }
 
   try {
-    await bootstrapSandboxie(proxies, surfers);
+    await configureSandboxie(proxies, surfers);
     console.log(`Настройка Sandboxie - ${chalk.green('успешно')}`);
   } catch (err) {
     console.log(`Настройка Sandboxie - ${chalk.red('ошибка')}`, err);
@@ -30,7 +30,7 @@ const bootstrap = async () => {
   }
 
   try {
-    await bootstrapProxyCap(proxies, surfers);
+    await configureProxyCap(proxies, surfers);
     console.log(`Настройка ProxyCap - ${chalk.green('успешно')}`);
   } catch (err) {
     console.log(`Настройка ProxyCap - ${chalk.red('ошибка')}`, err);
@@ -38,7 +38,7 @@ const bootstrap = async () => {
   }
 
   try {
-    await bootstrapStartBat(proxies, surfers, {
+    await createStartBat(proxies, surfers, {
       autoStart,
       systemStartTimeout,
       surferStartTimeout,
@@ -51,7 +51,7 @@ const bootstrap = async () => {
 
   if (autoStart) {
     try {
-      bootstrapAutoStart();
+      createAutoStart();
       console.log(`Создание автозапуска - ${chalk.green('успешно')}`);
     } catch (err) {
       console.log(`Создание автозапуска - ${chalk.red('ошибка')}`, err);

@@ -2,7 +2,7 @@ import path from 'path';
 import os from 'os';
 import windowsShortcuts from 'windows-shortcuts';
 
-export const bootstrapAutoStart = (): void => {
+export const createAutoStart = (): void => {
   const { username } = os.userInfo();
 
   windowsShortcuts.create(

@@ -3,7 +3,7 @@ import fs from 'fs-extra';
 import { ProxiesType } from '../types/ProxiesType';
 import { SurfersType } from '../types/SurfersType';
 
-export const bootstrapSandboxie = async (
+export const configureSandboxie = async (
   proxies: ProxiesType,
   surfers: SurfersType,
 ): Promise<void> => {

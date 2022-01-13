@@ -6,7 +6,7 @@ import { ProxyCapConfigType } from '../types/ProxyCapConfigType';
 import { ProxiesType } from '../types/ProxiesType';
 import { SurfersType } from '../types/SurfersType';
 
-export const bootstrapProxyCap = async (
+export const configureProxyCap = async (
   proxies: ProxiesType,
   surfers: SurfersType,
 ): Promise<void> => {

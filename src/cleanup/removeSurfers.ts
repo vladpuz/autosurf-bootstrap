@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs-extra';
 import { ConfigType } from '../types/ConfigType';
 
-export const cleanupSurfers = async (surfers: ConfigType['surfersOrder']): Promise<void> => {
+export const removeSurfers = async (surfers: ConfigType['surfersOrder']): Promise<void> => {
   const removeOperations = surfers.map((surfer) => {
     return fs.readdir(path.join(__dirname, `../../surfers/${surfer}`))
       .then((files) => {
