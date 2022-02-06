@@ -1,5 +1,5 @@
-import { config } from '../../config';
+import { config } from '../../config'
 
-const { surfersOrder } = config;
+const { surfersOrder } = config
 
-export type SurfersType = typeof surfersOrder[number][];
+export type SurfersType = Array<typeof surfersOrder[number]>

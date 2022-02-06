@@ -1,6 +1,6 @@
-import { config } from '../../config';
-import { ProxyType } from './ProxyType';
+import { config } from '../../config'
+import { ProxyType } from './ProxyType'
 
-const { surfersOrder } = config;
+const { surfersOrder } = config
 
-export type ProxiesType = { [key in typeof surfersOrder[number]]: ProxyType[] };
+export type ProxiesType = { [key in typeof surfersOrder[number]]: ProxyType[] }

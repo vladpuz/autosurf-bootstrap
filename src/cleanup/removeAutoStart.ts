@@ -1,7 +1,7 @@
-import os from 'os';
-import fs from 'fs-extra';
+import os from 'os'
+import fs from 'fs-extra'
 
 export const removeAutoStart = async (): Promise<void> => {
-  const { username } = os.userInfo();
-  await fs.remove(`C:/Users/${username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/Autosurf.lnk`);
-};
+  const { username } = os.userInfo()
+  await fs.remove(`C:/Users/${username}/AppData/Roaming/Microsoft/Windows/Start Menu/Programs/Startup/Autosurf.lnk`)
+}

@@ -1,33 +1,31 @@
-import path from 'path';
-import fs from 'fs-extra';
-import { ProxiesType } from '../types/ProxiesType';
-import { SurfersType } from '../types/SurfersType';
+import path from 'path'
+import fs from 'fs-extra'
+import { ProxiesType } from '../types/ProxiesType'
+import { SurfersType } from '../types/SurfersType'
 
 export const configureSandboxie = async (
   proxies: ProxiesType,
-  surfers: SurfersType,
+  surfers: SurfersType
 ): Promise<void> => {
-  let config = await fs.readFile(path.join(__dirname, '../utils/Sandboxie.ini'), 'utf-16le');
+  let config = await fs.readFile(path.join(__dirname, '../utils/Sandboxie.ini'), 'utf-16le')
 
-  let maxCopiesName: SurfersType[number] = surfers[0];
-  let maxCopiesLength = 0;
+  let maxCopiesName: SurfersType[number] = surfers[0]
+  let maxCopiesLength = 0
 
-  Object
-    .entries(proxies)
-    .forEach(([key, value]) => {
-      if (value.length > maxCopiesLength) {
-        maxCopiesName = key as SurfersType[number];
-        maxCopiesLength = value.length;
-      }
-    });
+  Object.entries(proxies).forEach(([key, value]) => {
+    if (value.length > maxCopiesLength) {
+      maxCopiesName = key as SurfersType[number]
+      maxCopiesLength = value.length
+    }
+  })
 
   proxies[maxCopiesName].forEach((proxy, i) => {
-    let forceFolders = '';
+    let forceFolders = ''
 
     surfers.forEach((surfer) => {
-      const folder = path.join(__dirname, `../../surfers/${surfer}/copy_${i + 1}`);
-      forceFolders += `ForceFolder=${folder}\n`;
-    });
+      const folder = path.join(__dirname, `../../surfers/${surfer}/copy_${i + 1}`)
+      forceFolders += `ForceFolder=${folder}\n`
+    })
 
     config += `
 [sandbox_${i + 1}]
@@ -48,8 +46,8 @@ Template=Chrome_Phishing_DirectAccess
 Template=Firefox_Phishing_DirectAccess
 Template=AutoRecoverIgnore
 ConfigLevel=9
-${forceFolders}`;
-  });
+${forceFolders}`
+  })
 
-  await fs.writeFile('C:/Windows/Sandboxie.ini', config, { encoding: 'utf-16le' });
-};
+  await fs.writeFile('C:/Windows/Sandboxie.ini', config, { encoding: 'utf-16le' })
+}

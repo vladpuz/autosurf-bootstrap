@@ -1,5 +1,5 @@
-export type ProxyCapConfigType = {
-  proxycap_ruleset: {
+export interface ProxyCapConfigType {
+  [proxycap_ruleset: string]: {
     '@version': number
     proxy_servers: {
       proxy_server: Array<{
@@ -38,4 +38,4 @@ export type ProxyCapConfigType = {
       }>
     }
   }
-};
+}

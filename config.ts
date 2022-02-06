@@ -13,6 +13,6 @@ export const config = {
   // Порядок запуска разных автосерфингов
   surfersOrder: [
     'webisida',
-    'simple',
-  ] as const,
-};
+    'simple'
+  ] as const
+}
