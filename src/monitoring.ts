@@ -90,12 +90,14 @@ const getLoadInfo = async (): Promise<void> => {
   }
 }
 
-getLoadInfo().then(() => {
-  setInterval(() => {
-    getLoadInfo().catch((err) => {
-      console.log(chalk.bgRed('Ошибка запуска мониторинга'), err)
-    })
-  }, monitoringInterval * 1000)
-}).catch((err) => {
-  console.log(chalk.bgRed('Ошибка запуска мониторинга'), err)
-})
+getLoadInfo()
+  .then(() => {
+    setInterval(() => {
+      getLoadInfo().catch((err) => {
+        console.log(chalk.bgRed('Ошибка запуска мониторинга'), err)
+      })
+    }, monitoringInterval * 1000)
+  })
+  .catch((err) => {
+    console.log(chalk.bgRed('Ошибка запуска мониторинга'), err)
+  })

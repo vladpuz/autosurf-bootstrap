@@ -47,10 +47,12 @@ const cleanup = async (): Promise<void> => {
   }
 }
 
-cleanup().then(() => {
-  console.log()
-  console.log(chalk.bgGreen('Очистка произведена успешно'))
-}).catch(() => {
-  console.log()
-  console.log(chalk.bgRed('Произошла непредвиденная ошибка'))
-})
+cleanup()
+  .then(() => {
+    console.log()
+    console.log(chalk.bgGreen('Очистка произведена успешно'))
+  })
+  .catch(() => {
+    console.log()
+    console.log(chalk.bgRed('Произошла непредвиденная ошибка'))
+  })

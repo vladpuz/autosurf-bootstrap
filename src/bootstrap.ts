@@ -60,10 +60,12 @@ const bootstrap = async (): Promise<void> => {
   }
 }
 
-bootstrap().then(() => {
-  console.log()
-  console.log(chalk.bgGreen('Все операции выполнены успешно'))
-}).catch(() => {
-  console.log()
-  console.log(chalk.bgRed('На одном из этапов произошла ошибка'))
-})
+bootstrap()
+  .then(() => {
+    console.log()
+    console.log(chalk.bgGreen('Все операции выполнены успешно'))
+  })
+  .catch(() => {
+    console.log()
+    console.log(chalk.bgRed('На одном из этапов произошла ошибка'))
+  })
