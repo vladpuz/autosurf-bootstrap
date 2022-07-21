@@ -42,10 +42,9 @@ Template=FileCopy
 Template=qWave
 Template=BlockPorts
 Template=LingerPrograms
-Template=Chrome_Phishing_DirectAccess
-Template=Firefox_Phishing_DirectAccess
 Template=AutoRecoverIgnore
 ConfigLevel=9
+UsePrivacyMode=n
 ${forceFolders}`
   })
 
