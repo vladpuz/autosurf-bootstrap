@@ -16,18 +16,22 @@ export const parseProxies = async (): Promise<ProxiesType> => {
       const split = proxy.split('@')
 
       if (split.length === 1) {
+        const ip = split[0].split(':')[0]
+        const port = +split[0].split(':')[1]
+
         return {
-          ip: split[0].split(':')[0],
-          port: isFinite(+split[0].split(':')[1]) || 80
+          ip,
+          port
         }
       }
 
       const [login, password] = split[0].split(':')
-      const [ip, port] = split[1].split(':')
+      const ip = split[1].split(':')[0]
+      const port = +split[1].split(':')[1]
 
       return {
         ip,
-        port: isFinite(+port) || 80,
+        port,
         login,
         password
       }
